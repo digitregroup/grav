@@ -52,9 +52,21 @@ $grav = Grav::instance(
 try {
     $grav->process();
 } catch (\Error $e) {
+    $grav['log']->error('Error.' . __CLASS__ . ':' . __METHOD__ . ': ' . print_r([
+            'msg'   => $e->getMessage(),
+            'url'   => $grav['page']->url(),
+            'uri'   => $grav['uri']->route(),
+            'trace' => $e->getTraceAsString(),
+        ], true));
     $grav->fireEvent('onFatalException', new Event(array('exception' => $e)));
     throw $e;
 } catch (\Exception $e) {
+    $grav['log']->error('Exception.' . __CLASS__ . ':' . __METHOD__ . ': ' . print_r([
+            'msg'   => $e->getMessage(),
+            'url'   => $grav['page']->url(),
+            'uri'   => $grav['uri']->route(),
+            'trace' => $e->getTraceAsString(),
+        ], true));
     $grav->fireEvent('onFatalException', new Event(array('exception' => $e)));
     throw $e;
 }
