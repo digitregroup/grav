@@ -56,9 +56,12 @@ class Errors
 
         if (isset($config['log']) && $config['log']) {
             $logger = $grav['log'];
-            $whoops->pushHandler(function($exception, $inspector, $run) use ($logger) {
+            $whoops->pushHandler(function($exception, $inspector, $run) use ($logger, $grav) {
                 try {
-                    $logger->addCritical($exception->getMessage() . ' - Trace: ' . $exception->getTraceAsString());
+                    $logger->addCritical($exception->getMessage() . print_r([
+                            'url'   => $grav['page']->url(),
+                            'uri'   => $grav['uri']->route(),
+                        ], true) . ' - Trace: ' . $exception->getTraceAsString());
                 } catch (\Exception $e) {
                     echo $e;
                 }
