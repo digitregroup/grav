@@ -126,6 +126,8 @@ class LogViewer
             'date' => \DateTime::createFromFormat('Y-m-d H:i:s', $data['date']),
             'logger' => $data['logger'],
             'level' => $data['level'],
+            'url' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null,
+            'query' => isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null,
             'message' => $data['message'],
             'trace' => isset($data['trace']) ? $this->parseTrace($data['trace']) : null,
             'context' => json_decode($data['context'], true),
