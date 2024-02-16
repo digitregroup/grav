@@ -3,15 +3,23 @@
 /**
  * @package    Grav\Common\Data
  *
- * @copyright  Copyright (C) 2015 - 2019 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2024 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
 namespace Grav\Common\Data;
 
+use DirectoryIterator;
 use Grav\Common\Grav;
 use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
+use RuntimeException;
+use function is_array;
+use function is_object;
 
+/**
+ * Class Blueprints
+ * @package Grav\Common\Data
+ */
 class Blueprints
 {
     /** @var array|string */
@@ -34,12 +42,13 @@ class Blueprints
      *
      * @param  string  $type  Blueprint type.
      * @return Blueprint
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function get($type)
     {
         if (!isset($this->instances[$type])) {
-            $this->instances[$type] = $this->loadFile($type);
+            $blueprint = $this->loadFile($type);
+            $this->instances[$type] = $blueprint;
         }
 
         return $this->instances[$type];
@@ -64,10 +73,9 @@ class Blueprints
             if ($locator->isStream($this->search)) {
                 $iterator = $locator->getIterator($this->search);
             } else {
-                $iterator = new \DirectoryIterator($this->search);
+                $iterator = new DirectoryIterator($this->search);
             }
 
-            /** @var \DirectoryIterator $file */
             foreach ($iterator as $file) {
                 if (!$file->isFile() || '.' . $file->getExtension() !== YAML_EXT) {
                     continue;
@@ -91,7 +99,7 @@ class Blueprints
     {
         $blueprint = new Blueprint($name);
 
-        if (\is_array($this->search) || \is_object($this->search)) {
+        if (is_array($this->search) || is_object($this->search)) {
             // Page types.
             $blueprint->setOverrides($this->search);
             $blueprint->setContext('blueprints://pages');
@@ -99,6 +107,15 @@ class Blueprints
             $blueprint->setContext($this->search);
         }
 
-        return $blueprint->load()->init();
+        try {
+            $blueprint->load()->init();
+        } catch (RuntimeException $e) {
+            $log = Grav::instance()['log'];
+            $log->error(sprintf('Blueprint %s cannot be loaded: %s', $name, $e->getMessage()));
+
+            throw $e;
+        }
+
+        return $blueprint;
     }
 }

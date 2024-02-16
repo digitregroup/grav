@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * @package    Grav\Framework\Interfaces
  *
- * @copyright  Copyright (C) 2015 - 2019 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2024 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
@@ -29,7 +29,7 @@ interface RenderInterface
      * @example {% render object layout 'custom' with { variable: 'value' } %}
      *
      * @param string|null $layout  Layout to be used.
-     * @param array|null  $context Extra context given to the renderer.
+     * @param array       $context Extra context given to the renderer.
      *
      * @return ContentBlockInterface|HtmlBlock Returns `HtmlBlock` containing the rendered output.
      * @api
