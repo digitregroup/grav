@@ -27,6 +27,12 @@ RewriteEngine On
 # If you experience problems on your site block out the operations listed below
 # This attempts to block the most common type of exploit `attempts` to Grav
 #
+# Block to rewrite espace-proprietaire subdomain
+# If the host is "stage.espace-proprietaire.optimhome.com"
+RewriteCond %{HTTP_HOST} ^stage.espace-proprietaire.optimhome.com$ [NC]
+# Then rewrite any request to /mon-compte/espace-proprietaire
+RewriteRule ^((?!folder).*)$ /$1 [NC,L]
+
 # Block out any script trying to base64_encode data within the URL.
 RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
 # Block out any script that includes a <script> tag in URL.
@@ -66,9 +72,6 @@ RewriteRule (^|/)\.(?!well-known) - [F]
 # Block access to specific files in the root folder
 RewriteRule ^(LICENSE\.txt|composer\.lock|composer\.json|\.htaccess)$ error [F]
 
-# Block to rewrite espace-proprietaire subdomain
-RewriteCond %{HTTP_HOST} ^stage.espace-proprietaire.optimhome.com
-RewriteRule ^(.*)$ /mon-compte/espace-proprietaire/$1 [L,NC,QSA]
 
 ## End - Security
 
