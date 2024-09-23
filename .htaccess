@@ -65,9 +65,15 @@ RewriteRule \.md$ error [F]
 RewriteRule (^|/)\.(?!well-known) - [F]
 # Block access to specific files in the root folder
 RewriteRule ^(LICENSE\.txt|composer\.lock|composer\.json|\.htaccess)$ error [F]
+
+# Block to rewrite espace-proprietaire subdomain
+RewriteCond %{HTTP_HOST} ^stage.espace-proprietaire.optimhome.com
+RewriteRule ^(.*)$ /mon-compte/espace-proprietaire/$1 [L,NC,QSA]
+
 ## End - Security
 
 </IfModule>
+
 
 # Begin - Prevent Browsing and Set Default Resources
 Options -Indexes
