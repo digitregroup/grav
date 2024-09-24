@@ -29,9 +29,8 @@ RewriteEngine On
 #
 # Block to rewrite espace-proprietaire subdomain
 # If the host is "stage.espace-proprietaire.optimhome.com"
-RewriteCond %{HTTP_HOST} ^stage.espace-proprietaire.optimhome.com$ [NC]
-# Then rewrite any request to /mon-compte/espace-proprietaire
-RewriteRule ^((?!folder).*)$ /$1 [NC,L]
+RewriteCond %{HTTP_HOST} ^stage\.espace-proprietaire\.optimhome\.com$ [NC]
+RewriteRule ^((?!mon-compte/espace-proprietaire/).*)$ /mon-compte/espace-proprietaire/$1 [L,NC]
 
 # Block out any script trying to base64_encode data within the URL.
 RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
