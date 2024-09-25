@@ -29,8 +29,11 @@ RewriteEngine On
 #
 # Block to rewrite espace-proprietaire subdomain
 # If the host is "stage.espace-proprietaire.optimhome.com"
-RewriteCond %{HTTP_HOST} !^stage.optimhome.com/mon-compte/espace-proprietaire$ [NC]
-RewriteCond %{REQUEST_URI} !^stage.optimhome.com/mon-compte/espace-proprietaire [NC]
+# RewriteCond %{HTTP_HOST} ^(stage.espace-proprietaire\.)?optimhome\.com$
+# RewriteRule ^/?mon-compte/espace-proprietaire$ https://stage.espace-proprietaire.optimhome.com/$1 [R=301]
+
+RewriteCond %{HTTP_HOST} ^stage\.espace-proprietaire\.optimhome\.com$
+RewriteRule ^ /mon-compte/espace-proprietaire/%{REQUEST_URI} [END,QSA]
 RewriteRule    "^mon-compte/espace-proprietaire"  "http://stage.espace-proprietaire.optimhome.com/" [L,R=301]
 
 
